@@ -75,3 +75,22 @@ export async function getSession(req?: NextRequest): Promise<AdminPayload | null
     return null;
   }
 }
+
+export async function requireAuth(
+  req: NextRequest,
+  allowedRoles?: string[]
+): Promise<AdminPayload> {
+  const session = await getSession(req);
+  if (!session) {
+    throw new Error('Unauthorized: Authentication required');
+  }
+
+  if (allowedRoles && allowedRoles.length > 0) {
+    if (!allowedRoles.includes(session.role)) {
+      throw new Error('Forbidden: Insufficient permissions');
+    }
+  }
+
+  return session;
+}
+

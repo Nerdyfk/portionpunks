@@ -1,18 +1,20 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const [collection, roadmap, faqs, socials, settingsList] = await Promise.all([
-      db.collection.findFirst(),
-      db.roadmapItem.findMany({ orderBy: { displayOrder: 'asc' } }),
-      db.fAQ.findMany({ orderBy: { displayOrder: 'asc' } }),
-      db.socialLink.findMany({ where: { active: true }, orderBy: { displayOrder: 'asc' } }),
-      db.siteSetting.findMany(),
+      db?.collection?.findFirst ? db.collection.findFirst() : null,
+      db?.roadmapItem?.findMany ? db.roadmapItem.findMany({ orderBy: { displayOrder: 'asc' } }) : [],
+      db?.fAQ?.findMany ? db.fAQ.findMany({ orderBy: { displayOrder: 'asc' } }) : [],
+      db?.socialLink?.findMany ? db.socialLink.findMany({ where: { active: true }, orderBy: { displayOrder: 'asc' } }) : [],
+      db?.siteSetting?.findMany ? db.siteSetting.findMany() : [],
     ]);
 
     const settingsMap: Record<string, string> = {};
-    settingsList.forEach((s) => {
+    (settingsList || []).forEach((s: { key: string; value: string }) => {
       settingsMap[s.key] = s.value;
     });
 

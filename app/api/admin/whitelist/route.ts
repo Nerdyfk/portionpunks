@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 // Memory store fallbacks if DB table doesn't have custom columns
 let globalWhitelistLive = true;
 let globalWhitelistTasks = [
@@ -117,7 +119,7 @@ export async function POST(req: NextRequest) {
     // Update Whitelist Entry Status
     if (action === 'UPDATE_STATUS' && id && status) {
       try {
-        await db.whitelistSubmission.update({
+        await (db.whitelistSubmission as any).update({
           where: { id },
           data: { status },
         });
