@@ -3,8 +3,7 @@ import { db } from '@/lib/db';
 import { verifyPassword, hashPassword, createSessionToken, COOKIE_NAME } from '@/lib/auth';
 import { getClientIp, logActivity } from '@/lib/security';
 
-const DEFAULT_ADMIN_EMAIL = 'admin@portionpunks.com';
-const DEFAULT_ADMIN_PASS = 'PortionPunks2026!';
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,37 +15,48 @@ export async function POST(req: NextRequest) {
     }
 
     const cleanEmail = String(email).trim().toLowerCase();
+    const envAdminEmail = (process.env.ADMIN_EMAIL || 'admin@portionpunks.com').trim().toLowerCase();
+    const envAdminPass = process.env.ADMIN_PASSWORD || 'PortionPunks2026!';
 
     // 1. Attempt to find user in DB
     let user: any = null;
 
     try {
-      user = await db.adminUser.findUnique({
-        where: { email: cleanEmail },
-      });
+      if (db?.adminUser?.findUnique) {
+        user = await db.adminUser.findUnique({
+          where: { email: cleanEmail },
+        });
+      }
     } catch (dbErr) {
       console.warn('DB lookup during admin login:', dbErr);
     }
 
-    // 2. Auto-seed or pure fallback if user is missing and credentials match default dev seed
+    // 2. If user not in DB, allow login if credentials match env variables (and auto-seed DB)
     if (!user) {
-      if (cleanEmail === DEFAULT_ADMIN_EMAIL && password === DEFAULT_ADMIN_PASS) {
+      if (cleanEmail === envAdminEmail && password === envAdminPass) {
         try {
-          const hashedPassword = await hashPassword(DEFAULT_ADMIN_PASS);
-          user = await db.adminUser.create({
-            data: {
-              email: DEFAULT_ADMIN_EMAIL,
-              passwordHash: hashedPassword,
+          if (db?.adminUser?.create) {
+            const hashedPassword = await hashPassword(envAdminPass);
+            user = await db.adminUser.create({
+              data: {
+                email: envAdminEmail,
+                passwordHash: hashedPassword,
+                name: 'Master Admin',
+                role: 'ADMIN',
+              },
+            });
+          } else {
+            user = {
+              id: 'admin_default_seed_id',
+              email: envAdminEmail,
               name: 'Master Admin',
               role: 'ADMIN',
-            },
-          });
-          console.log('Auto-created default admin user in database.');
+            };
+          }
         } catch (seedErr) {
-          console.warn('Auto-seed fallback admin user object created:', seedErr);
           user = {
             id: 'admin_default_seed_id',
-            email: DEFAULT_ADMIN_EMAIL,
+            email: envAdminEmail,
             name: 'Master Admin',
             role: 'ADMIN',
           };
@@ -55,21 +65,26 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Invalid admin credentials' }, { status: 401 });
       }
     } else {
-      // 3. User exists -> verify password hash or default check
+      // 3. User exists -> verify password hash or check against env password
+      let isValid = false;
       if (user.passwordHash) {
-        const isValid = await verifyPassword(password, user.passwordHash);
-        if (!isValid) {
+        isValid = await verifyPassword(password, user.passwordHash);
+      }
+
+      // Allow env password fallback if hash match fails or if matching configured env credentials
+      if (!isValid) {
+        if (cleanEmail === envAdminEmail && password === envAdminPass) {
+          isValid = true;
+        } else {
           return NextResponse.json({ error: 'Invalid admin credentials' }, { status: 401 });
         }
-      } else if (password !== DEFAULT_ADMIN_PASS) {
-        return NextResponse.json({ error: 'Invalid admin credentials' }, { status: 401 });
       }
     }
 
     // 4. Create JWT session token
     const token = await createSessionToken({
       userId: user.id || 'admin_default_seed_id',
-      email: user.email,
+      email: user.email || envAdminEmail,
       name: user.name || 'Master Admin',
       role: user.role || 'ADMIN',
     });
@@ -79,7 +94,7 @@ export async function POST(req: NextRequest) {
       success: true,
       user: {
         id: user.id || 'admin_default_seed_id',
-        email: user.email,
+        email: user.email || envAdminEmail,
         name: user.name || 'Master Admin',
         role: user.role || 'ADMIN',
       },
@@ -88,7 +103,7 @@ export async function POST(req: NextRequest) {
     // 6. Set HTTP-Only Cookie directly on NextResponse
     response.cookies.set(COOKIE_NAME, token, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
       maxAge: 60 * 60 * 24, // 24 hours
@@ -97,11 +112,11 @@ export async function POST(req: NextRequest) {
     // 7. Log activity safely
     try {
       await logActivity({
-        userId: user.id,
-        userEmail: user.email,
+        userId: user.id || 'admin_seed_id',
+        userEmail: user.email || envAdminEmail,
         action: 'LOGIN',
         resource: 'AdminUser',
-        resourceId: user.id,
+        resourceId: user.id || 'admin_seed_id',
         details: 'Admin logged in successfully',
         ipAddress: getClientIp(req),
       });
