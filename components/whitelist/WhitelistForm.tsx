@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, CheckCircle2, Lock, ExternalLink, PauseCircle, Wallet } from 'lucide-react';
+import { X, CheckCircle2, Lock, PauseCircle, Wallet, AlertTriangle } from 'lucide-react';
 import MathCaptcha from '../captcha/MathCaptcha';
 
 interface WhitelistTask {
@@ -34,20 +34,21 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
   const [tasks, setTasks] = useState<WhitelistTask[]>([
     {
       id: 'task_1',
-      title: 'FOLLOW @PORTIONPUNKS AND @POTIONPUNKS',
+      title: 'FOLLOW @POTIONPUNKS ON X',
       url: 'https://x.com/potionpunks',
-      proofPlaceholder: '@yourusername (or profile link)',
+      proofPlaceholder: 'Enter your @username',
       required: true,
     },
     {
       id: 'task_2',
-      title: 'LIKE, REPOST & COMMENT ON PINNED POST',
+      title: 'LIKE, RETWEET & COMMENT ON PINNED POST',
       url: 'https://x.com/potionpunks',
-      proofPlaceholder: 'https://x.com/.../status/... (comment link)',
+      proofPlaceholder: 'Enter your comment link',
       required: true,
     },
   ]);
   const [taskProofs, setTaskProofs] = useState<Record<string, string>>({});
+  const [validationErrors, setValidationErrors] = useState<Record<string, string | null>>({});
 
   const [captchaId, setCaptchaId] = useState('');
   const [captchaAnswer, setCaptchaAnswer] = useState('');
@@ -63,7 +64,14 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
       .then((data) => {
         if (data.isLive !== undefined) setIsLive(data.isLive);
         if (data.tasks && data.tasks.length > 0) {
-          setTasks(data.tasks);
+          const updatedTasks = data.tasks.map((t: WhitelistTask) => {
+            const isFollow = t.id === 'task_1' || t.title.toUpperCase().includes('FOLLOW');
+            return {
+              ...t,
+              proofPlaceholder: isFollow ? 'Enter your @username' : 'Enter your comment link',
+            };
+          });
+          setTasks(updatedTasks);
         }
       })
       .catch(() => {});
@@ -71,8 +79,35 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
 
   if (!isOpen) return null;
 
-  const handleProofChange = (taskId: string, val: string) => {
+  const handleProofChange = (taskId: string, val: string, isFollowTask: boolean) => {
     setTaskProofs((prev) => ({ ...prev, [taskId]: val }));
+
+    // Instant validation check
+    const trimmed = val.trim();
+    if (trimmed.length > 0) {
+      if (isFollowTask) {
+        if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.includes('x.com/') || trimmed.includes('twitter.com/')) {
+          setValidationErrors((prev) => ({
+            ...prev,
+            [taskId]: 'Follow task requires a Twitter/X username (e.g. @username), not a link.',
+          }));
+        } else {
+          setValidationErrors((prev) => ({ ...prev, [taskId]: null }));
+        }
+      } else {
+        // Comment / Link task validation
+        if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://') && !trimmed.includes('x.com') && !trimmed.includes('twitter.com')) {
+          setValidationErrors((prev) => ({
+            ...prev,
+            [taskId]: 'Like, Retweet & Comment task requires a valid link (e.g. https://x.com/...).',
+          }));
+        } else {
+          setValidationErrors((prev) => ({ ...prev, [taskId]: null }));
+        }
+      }
+    } else {
+      setValidationErrors((prev) => ({ ...prev, [taskId]: null }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -80,6 +115,44 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
 
     if (!isLive) {
       setErrorMessage('Whitelist registrations are currently paused by administration.');
+      return;
+    }
+
+    // Validate inputs
+    let hasValidationError = false;
+    tasks.forEach((task) => {
+      const isFollow = task.id === 'task_1' || task.title.toUpperCase().includes('FOLLOW');
+      const proofVal = (taskProofs[task.id] || '').trim();
+
+      if (task.required && !proofVal) {
+        hasValidationError = true;
+        setValidationErrors((prev) => ({
+          ...prev,
+          [task.id]: 'This quest proof is required.',
+        }));
+      } else if (proofVal) {
+        if (isFollow) {
+          if (proofVal.startsWith('http://') || proofVal.startsWith('https://') || proofVal.includes('x.com/') || proofVal.includes('twitter.com/')) {
+            hasValidationError = true;
+            setValidationErrors((prev) => ({
+              ...prev,
+              [task.id]: 'Follow task requires a Twitter/X username (e.g. @username), not a link.',
+            }));
+          }
+        } else {
+          if (!proofVal.startsWith('http://') && !proofVal.startsWith('https://') && !proofVal.includes('x.com') && !proofVal.includes('twitter.com')) {
+            hasValidationError = true;
+            setValidationErrors((prev) => ({
+              ...prev,
+              [task.id]: 'Like, Retweet & Comment task requires a valid link (e.g. https://x.com/...).',
+            }));
+          }
+        }
+      }
+    });
+
+    if (hasValidationError) {
+      setErrorMessage('Please fix the validation errors on quest proofs before submitting.');
       return;
     }
 
@@ -124,25 +197,25 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#090b10]/90 backdrop-blur-md animate-fadeIn font-sans">
-      <div className="bg-[#12141e] border border-[#232738] w-full max-w-xl p-6 relative shadow-[0_0_40px_rgba(0,0,0,0.8)] rounded-xl text-white max-h-[92vh] overflow-y-auto custom-scrollbar">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-950/85 backdrop-blur-md animate-fadeIn font-sans">
+      <div className="bg-charcoal-900 border-2 border-smoke-800 w-full max-w-xl p-6 relative shadow-2xl rounded-sm text-white max-h-[92vh] overflow-y-auto">
         
         {/* Close Button */}
         {onClose && (
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors"
+            className="absolute top-4 right-4 text-smoke-400 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         )}
 
         {/* Modal Header */}
-        <div className="mb-6 border-b border-[#1f2334] pb-4">
-          <h2 className="font-pixel-heading text-base sm:text-lg text-[#f3c246] tracking-wide mb-1 uppercase">
+        <div className="mb-5 border-b border-smoke-800 pb-3">
+          <h2 className="font-pixel-heading text-sm sm:text-base text-[#f3c246] tracking-wide mb-1 uppercase">
             PORTION PUNKS WHITELIST QUESTS
           </h2>
-          <p className="text-xs text-[#8c94ad] font-sans">
+          <p className="text-xs text-smoke-400 font-sans">
             Complete the quests and enter proof details to reserve your placement.
           </p>
         </div>
@@ -153,13 +226,13 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
               <PauseCircle className="w-8 h-8" />
             </div>
             <h4 className="font-pixel-heading text-base text-white">WHITELIST PAUSED</h4>
-            <p className="text-xs text-gray-300 font-sans leading-relaxed max-w-md mx-auto">
+            <p className="text-xs text-smoke-300 font-sans leading-relaxed max-w-md mx-auto">
               Whitelist registrations are currently PAUSED by administration. Check back soon or follow @portionpunks on X for updates.
             </p>
             {onClose && (
               <button
                 onClick={onClose}
-                className="w-full py-3 bg-[#1a1d2b] hover:bg-[#25293c] text-white font-pixel-display text-xs border border-[#2b3044] rounded-lg"
+                className="w-full py-3 bg-charcoal-800 hover:bg-charcoal-700 text-white font-pixel-display text-xs border border-smoke-700 rounded-sm"
               >
                 CLOSE WINDOW
               </button>
@@ -167,96 +240,102 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
           </div>
         ) : successMessage ? (
           <div className="py-6 text-center space-y-4">
-            <div className="w-16 h-16 bg-emerald-500/20 border-2 border-emerald-400 text-emerald-400 rounded-full flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+            <div className="w-16 h-16 bg-neon-green/20 border-2 border-neon-green text-neon-green rounded-full flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(0,255,102,0.4)]">
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <h4 className="font-pixel-heading text-base text-[#f3c246]">WHITELIST CONFIRMED</h4>
-            <p className="text-xs text-gray-300 font-sans leading-relaxed max-w-md mx-auto">
+            <p className="text-xs text-smoke-300 font-sans leading-relaxed max-w-md mx-auto">
               {successMessage}
             </p>
             {onClose && (
               <button
                 onClick={onClose}
-                className="w-full py-3 bg-[#f3c246] text-black font-pixel-display text-xs font-bold rounded-lg hover:bg-[#e2b135] transition-colors"
+                className="w-full py-3 bg-[#f3c246] text-charcoal-950 font-pixel-display text-xs font-bold border-2 border-black rounded-sm shadow-pixel-black hover:bg-[#e2b135] transition-colors"
               >
                 RETURN TO WEBSITE
               </button>
             )}
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             
             <div className="text-xs font-pixel-display text-[#f3c246] tracking-wider uppercase mb-1">
               WHITELIST QUESTS
             </div>
 
             {/* Dynamic Tasks / Quests */}
-            <div className="space-y-4">
-              {tasks.map((task) => (
-                <div 
-                  key={task.id} 
-                  className="bg-[#181a26] border border-[#262a3c] p-4 rounded-xl space-y-3 hover:border-[#383e58] transition-colors"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-9 h-9 bg-[#11131c] border border-[#2b3044] rounded-lg flex items-center justify-center text-gray-300">
-                        <XTwitterIcon className="w-4 h-4" />
-                      </div>
-                      <div className="flex flex-col">
-                        <div className="flex items-center space-x-2">
-                          <span className="font-pixel-display text-xs text-[#f3c246] uppercase">
-                            {task.title}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+            <div className="space-y-3.5">
+              {tasks.map((task) => {
+                const isFollowTask = task.id === 'task_1' || task.title.toUpperCase().includes('FOLLOW');
+                const placeholderText = isFollowTask ? 'Enter your @username' : 'Enter your comment link';
+                const hasError = validationErrors[task.id];
 
-                    <div className="flex items-center space-x-2">
-                      {task.url && (
+                return (
+                  <div 
+                    key={task.id} 
+                    className="bg-charcoal-900 border-2 border-smoke-800 p-4 rounded-sm shadow-md font-sans space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-charcoal-950 border border-smoke-800 rounded-sm flex items-center justify-center text-smoke-300 shrink-0">
+                          <XTwitterIcon className="w-4 h-4" />
+                        </div>
+                        
+                        {/* Linked Title text with Underline */}
                         <a
-                          href={task.url}
+                          href={task.url || 'https://x.com/potionpunks'}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[10px] text-gray-400 hover:text-[#f3c246] transition-colors p-1"
-                          title="Open Link"
+                          className="font-pixel-display text-xs text-[#f3c246] hover:text-[#fde047] underline underline-offset-4 cursor-pointer uppercase transition-colors"
                         >
-                          <ExternalLink className="w-3.5 h-3.5" />
+                          {task.title}
                         </a>
-                      )}
+                      </div>
+
                       {task.required && (
-                        <span className="bg-[#332811] border border-[#947629] text-[#f59e0b] text-[9px] font-pixel-display px-2 py-0.5 rounded-md uppercase tracking-wider">
+                        <span className="bg-[#332811] border border-[#947629] text-[#f59e0b] text-[9px] font-pixel-display px-2 py-0.5 rounded-sm uppercase tracking-wider shrink-0 ml-2">
                           REQUIRED
                         </span>
                       )}
                     </div>
-                  </div>
 
-                  <div>
-                    <input
-                      type="text"
-                      required={task.required}
-                      placeholder={task.proofPlaceholder || '@yourusername (or profile link)'}
-                      value={taskProofs[task.id] || ''}
-                      onChange={(e) => handleProofChange(task.id, e.target.value)}
-                      className="w-full bg-[#11131c] border border-[#cba23e]/50 focus:border-[#f3c246] text-white placeholder-[#5a6078] text-xs px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#f3c246]/40 transition-all font-mono shadow-inner"
-                    />
+                    <div>
+                      <input
+                        type="text"
+                        required={task.required}
+                        placeholder={placeholderText}
+                        value={taskProofs[task.id] || ''}
+                        onChange={(e) => handleProofChange(task.id, e.target.value, isFollowTask)}
+                        className={`w-full bg-charcoal-850 border text-white text-xs px-3.5 py-2.5 focus:outline-none font-mono rounded-sm ${
+                          hasError
+                            ? 'border-red-500/80 focus:border-red-400 bg-red-950/20'
+                            : 'border-smoke-700 focus:border-neon-green'
+                        }`}
+                      />
+                      {hasError && (
+                        <div className="flex items-center space-x-1.5 text-[11px] text-red-400 mt-1.5 font-sans">
+                          <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                          <span>{hasError}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {/* Wallet Address Quest Card */}
-              <div className="bg-[#181a26] border border-[#262a3c] p-4 rounded-xl space-y-3 hover:border-[#383e58] transition-colors">
+              <div className="bg-charcoal-900 border-2 border-smoke-800 p-4 rounded-sm shadow-md font-sans space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-9 h-9 bg-[#11131c] border border-[#2b3044] rounded-lg flex items-center justify-center text-gray-300">
-                      <Wallet className="w-4 h-4 text-[#f3c246]" />
+                    <div className="w-8 h-8 bg-charcoal-950 border border-smoke-800 rounded-sm flex items-center justify-center text-smoke-300 shrink-0">
+                      <Wallet className="w-4 h-4 text-neon-green" />
                     </div>
                     <span className="font-pixel-display text-xs text-[#f3c246] uppercase">
                       SUBMIT EVM WALLET ADDRESS
                     </span>
                   </div>
 
-                  <span className="bg-[#332811] border border-[#947629] text-[#f59e0b] text-[9px] font-pixel-display px-2 py-0.5 rounded-md uppercase tracking-wider">
+                  <span className="bg-[#332811] border border-[#947629] text-[#f59e0b] text-[9px] font-pixel-display px-2 py-0.5 rounded-sm uppercase tracking-wider shrink-0">
                     REQUIRED
                   </span>
                 </div>
@@ -268,14 +347,14 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
                     placeholder="0x1234567890abcdef1234567890abcdef12345678"
                     value={walletAddress}
                     onChange={(e) => setWalletAddress(e.target.value)}
-                    className="w-full bg-[#11131c] border border-[#cba23e]/50 focus:border-[#f3c246] text-white placeholder-[#5a6078] text-xs px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#f3c246]/40 transition-all font-mono shadow-inner"
+                    className="w-full bg-charcoal-850 border border-smoke-700 focus:border-neon-green text-white placeholder-smoke-500 text-xs px-3.5 py-2.5 focus:outline-none font-mono rounded-sm"
                   />
                 </div>
               </div>
             </div>
 
             {/* Integrated 45-Second Math CAPTCHA Component */}
-            <div className="pt-2">
+            <div className="pt-1">
               <MathCaptcha
                 onCaptchaReady={(id, ans) => {
                   setCaptchaId(id);
@@ -292,10 +371,10 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
               <button
                 type="submit"
                 disabled={!captchaValid || submitting}
-                className={`w-full py-3.5 font-pixel-display text-xs font-bold uppercase rounded-lg transition-all flex items-center justify-center space-x-2 shadow-lg ${
+                className={`w-full py-3.5 font-pixel-display text-xs font-bold uppercase rounded-sm border-2 border-black shadow-pixel-black transition-all flex items-center justify-center space-x-2 ${
                   captchaValid && !submitting
-                    ? 'bg-[#f3c246] text-black hover:bg-[#e2b135] cursor-pointer shadow-[0_0_15px_rgba(243,194,70,0.3)]'
-                    : 'bg-[#252838] text-gray-500 border border-[#32364a] cursor-not-allowed opacity-60'
+                    ? 'bg-[#f3c246] text-charcoal-950 hover:bg-[#e2b135] cursor-pointer'
+                    : 'bg-smoke-800 text-smoke-500 border-smoke-700 cursor-not-allowed opacity-60'
                 }`}
               >
                 {submitting ? (
