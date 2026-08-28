@@ -9,11 +9,12 @@ async function main() {
   console.log('--- Starting Portion Punks Seeding ---');
 
   // 1. Create Default Super Admin
-  const adminEmail = 'admin@portionpunks.com';
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@portionpunks.com';
+  const rawPassword = process.env.ADMIN_PASSWORD || 'PortionPunks2026!';
   const existingAdmin = await prisma.adminUser.findUnique({ where: { email: adminEmail } });
 
   if (!existingAdmin) {
-    const passwordHash = await bcrypt.hash('PortionPunks2026!', 10);
+    const passwordHash = await bcrypt.hash(rawPassword, 10);
     await prisma.adminUser.create({
       data: {
         email: adminEmail,
@@ -22,7 +23,7 @@ async function main() {
         role: 'SUPER_ADMIN',
       },
     });
-    console.log('Created Super Admin user: admin@portionpunks.com / PortionPunks2026!');
+    console.log(`Created Super Admin user: ${adminEmail}`);
   }
 
   // 2. Create Collection Details
