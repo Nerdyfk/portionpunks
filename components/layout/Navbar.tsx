@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Wallet } from 'lucide-react';
-import WalletModal from '../wallet/WalletModal';
+import { Menu, X } from 'lucide-react';
 
 interface NavbarProps {
   onOpenWhitelist?: () => void;
@@ -12,8 +11,6 @@ interface NavbarProps {
 export default function Navbar({ onOpenWhitelist }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [walletModalOpen, setWalletModalOpen] = useState(false);
-  const [connectedWallet, setConnectedWallet] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,19 +75,11 @@ export default function Navbar({ onOpenWhitelist }: NavbarProps) {
             {onOpenWhitelist && (
               <button
                 onClick={onOpenWhitelist}
-                className="font-pixel-display text-xs px-4 py-2 bg-neon-green/10 text-neon-green border border-neon-green/40 hover:border-neon-green hover:bg-neon-green/20 transition-all rounded-sm shadow-[0_0_10px_rgba(0,255,102,0.2)]"
+                className="font-pixel-display text-xs px-5 py-2.5 bg-neon-green/10 text-neon-green border border-neon-green/40 hover:border-neon-green hover:bg-neon-green/20 transition-all rounded-sm shadow-[0_0_10px_rgba(0,255,102,0.2)] font-bold tracking-wider"
               >
-                WHITELIST
+                JOIN WHITELIST
               </button>
             )}
-
-            <button
-              onClick={() => setWalletModalOpen(true)}
-              className="font-pixel-display text-xs px-4 py-2 bg-charcoal-800 text-white border-2 border-black hover:border-neon-green shadow-pixel-black hover:shadow-neon-glow transition-all flex items-center space-x-2 rounded-sm"
-            >
-              <Wallet className="w-3.5 h-3.5 text-neon-green" />
-              <span>{connectedWallet ? `${connectedWallet.slice(0, 6)}...${connectedWallet.slice(-4)}` : 'CONNECT WALLET'}</span>
-            </button>
           </div>
 
           {/* Mobile Hamburger Toggle */}
@@ -133,29 +122,10 @@ export default function Navbar({ onOpenWhitelist }: NavbarProps) {
                   JOIN WHITELIST
                 </button>
               )}
-
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setWalletModalOpen(true);
-                }}
-                className="font-pixel-display text-xs w-full py-3 bg-charcoal-800 text-white border-2 border-black hover:border-neon-green flex items-center justify-center space-x-2"
-              >
-                <Wallet className="w-4 h-4 text-neon-green" />
-                <span>{connectedWallet ? `${connectedWallet.slice(0, 6)}...${connectedWallet.slice(-4)}` : 'CONNECT WALLET'}</span>
-              </button>
             </div>
           </div>
         </div>
       )}
-
-      {/* Wallet Connectivity Modal */}
-      <WalletModal
-        isOpen={walletModalOpen}
-        onClose={() => setWalletModalOpen(false)}
-        onConnect={(addr) => setConnectedWallet(addr)}
-        connectedAddress={connectedWallet}
-      />
     </>
   );
 }
