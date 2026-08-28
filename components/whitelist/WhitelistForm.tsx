@@ -292,9 +292,13 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
                         </a>
                       </div>
 
-                      {task.required && (
+                      {task.required ? (
                         <span className="bg-[#332811] border border-[#947629] text-[#f59e0b] text-[9px] font-pixel-display px-2 py-0.5 rounded-sm uppercase tracking-wider shrink-0 ml-2">
                           REQUIRED
+                        </span>
+                      ) : (
+                        <span className="bg-charcoal-850 border border-smoke-700 text-smoke-400 text-[9px] font-pixel-display px-2 py-0.5 rounded-sm uppercase tracking-wider shrink-0 ml-2">
+                          OPTIONAL
                         </span>
                       )}
                     </div>

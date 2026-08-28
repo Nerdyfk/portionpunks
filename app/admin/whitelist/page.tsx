@@ -286,9 +286,18 @@ export default function WhitelistAdminPage() {
             {tasks.map((task, idx) => (
               <div key={task.id || idx} className="bg-charcoal-900 border-2 border-smoke-800 p-5 rounded-sm space-y-3 relative">
                 <div className="flex justify-between items-center border-b border-smoke-850 pb-2">
-                  <span className="font-pixel-display text-xs text-neon-green">
-                    TASK #{idx + 1}
-                  </span>
+                  <div className="flex items-center space-x-2">
+                    <span className="font-pixel-display text-xs text-neon-green">
+                      TASK #{idx + 1}
+                    </span>
+                    <span className={`text-[9px] font-pixel-display px-2 py-0.5 border rounded-sm ${
+                      task.required
+                        ? 'bg-[#332811] text-[#f59e0b] border-[#947629]'
+                        : 'bg-charcoal-850 text-smoke-400 border-smoke-700'
+                    }`}>
+                      {task.required ? 'REQUIRED' : 'OPTIONAL'}
+                    </span>
+                  </div>
                   <button
                     onClick={() => handleRemoveTask(idx)}
                     className="text-red-400 hover:text-red-300 p-1"
@@ -337,6 +346,37 @@ export default function WhitelistAdminPage() {
                     placeholder="e.g. Enter Tweet proof URL or @username"
                     className="w-full bg-charcoal-850 border border-smoke-700 text-white text-xs px-3 py-2 focus:outline-none focus:border-neon-green rounded-sm"
                   />
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-smoke-850">
+                  <span className="text-[11px] font-pixel-display text-smoke-300">
+                    TASK REQUIREMENT TYPE
+                  </span>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      type="button"
+                      onClick={() => handleTaskChange(idx, 'required', true)}
+                      className={`px-3 py-1.5 text-[10px] font-pixel-display border rounded-sm transition-all ${
+                        task.required
+                          ? 'bg-[#332811] text-[#f59e0b] border-[#947629] font-bold'
+                          : 'bg-charcoal-850 text-smoke-400 border-smoke-700 hover:text-white'
+                      }`}
+                    >
+                      REQUIRED TASK
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleTaskChange(idx, 'required', false)}
+                      className={`px-3 py-1.5 text-[10px] font-pixel-display border rounded-sm transition-all ${
+                        !task.required
+                          ? 'bg-charcoal-800 text-smoke-200 border-smoke-600 font-bold'
+                          : 'bg-charcoal-850 text-smoke-400 border-smoke-700 hover:text-white'
+                      }`}
+                    >
+                      OPTIONAL TASK
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

@@ -3,6 +3,9 @@ import { verifyAndConsumeCaptcha } from '@/lib/captcha';
 import { getClientIp } from '@/lib/security';
 import { db } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
+
 export async function GET() {
   try {
     let isLive = true;
