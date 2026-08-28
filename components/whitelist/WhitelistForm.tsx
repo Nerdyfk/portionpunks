@@ -64,14 +64,7 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
       .then((data) => {
         if (data.isLive !== undefined) setIsLive(data.isLive);
         if (data.tasks && data.tasks.length > 0) {
-          const updatedTasks = data.tasks.map((t: WhitelistTask) => {
-            const isFollow = t.id === 'task_1' || t.title.toUpperCase().includes('FOLLOW');
-            return {
-              ...t,
-              proofPlaceholder: isFollow ? 'Enter your @username' : 'Enter your comment link',
-            };
-          });
-          setTasks(updatedTasks);
+          setTasks(data.tasks);
         }
       })
       .catch(() => {});
@@ -212,7 +205,7 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
 
         {/* Modal Header */}
         <div className="mb-5 border-b border-smoke-800 pb-3">
-          <h2 className="font-pixel-heading text-sm sm:text-base text-[#f3c246] tracking-wide mb-1 uppercase">
+          <h2 className="font-pixel-heading text-sm sm:text-base text-white tracking-wide mb-1 uppercase">
             PORTION PUNKS WHITELIST QUESTS
           </h2>
           <p className="text-xs text-smoke-400 font-sans">
@@ -243,7 +236,7 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
             <div className="w-16 h-16 bg-neon-green/20 border-2 border-neon-green text-neon-green rounded-full flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(0,255,102,0.4)]">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h4 className="font-pixel-heading text-base text-[#f3c246]">WHITELIST CONFIRMED</h4>
+            <h4 className="font-pixel-heading text-base text-white">WHITELIST CONFIRMED</h4>
             <p className="text-xs text-smoke-300 font-sans leading-relaxed max-w-md mx-auto">
               {successMessage}
             </p>
@@ -259,7 +252,7 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             
-            <div className="text-xs font-pixel-display text-[#f3c246] tracking-wider uppercase mb-1">
+            <div className="text-xs font-pixel-display text-white tracking-wider uppercase mb-1">
               WHITELIST QUESTS
             </div>
 
@@ -267,7 +260,7 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
             <div className="space-y-3.5">
               {tasks.map((task) => {
                 const isFollowTask = task.id === 'task_1' || task.title.toUpperCase().includes('FOLLOW');
-                const placeholderText = isFollowTask ? 'Enter your @username' : 'Enter your comment link';
+                const placeholderText = task.proofPlaceholder || (isFollowTask ? 'Enter your @username' : 'Enter your comment link');
                 const hasError = validationErrors[task.id];
 
                 return (
@@ -281,12 +274,12 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
                           <XTwitterIcon className="w-4 h-4" />
                         </div>
                         
-                        {/* Linked Title text with Underline */}
+                        {/* Linked Title text in White with Underline */}
                         <a
                           href={task.url || 'https://x.com/potionpunks'}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-pixel-display text-xs text-[#f3c246] hover:text-[#fde047] underline underline-offset-4 cursor-pointer uppercase transition-colors"
+                          className="font-pixel-display text-xs text-white hover:text-neon-green underline underline-offset-4 cursor-pointer uppercase transition-colors"
                         >
                           {task.title}
                         </a>
@@ -334,7 +327,7 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
                     <div className="w-8 h-8 bg-charcoal-950 border border-smoke-800 rounded-sm flex items-center justify-center text-smoke-300 shrink-0">
                       <Wallet className="w-4 h-4 text-neon-green" />
                     </div>
-                    <span className="font-pixel-display text-xs text-[#f3c246] uppercase">
+                    <span className="font-pixel-display text-xs text-white uppercase">
                       SUBMIT EVM WALLET ADDRESS
                     </span>
                   </div>
