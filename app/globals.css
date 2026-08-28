@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-display: 'Silkscreen', cursive;
+  --font-sans: 'Inter', sans-serif;
+}
+
+body {
+  background-color: #1c212b;
+  color: #e5e9f0;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1c212b;
+}
+::-webkit-scrollbar-thumb {
+  background: #2e3644;
+  border-radius: 2px;
+  border: 1px solid #00ff66;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff66;
+}
+
+/* Pixel Art Rendering Rules */
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* HUD Text Styles */
+.font-pixel-heading {
+  font-family: var(--font-pixel);
+  letter-spacing: -0.05em;
+}
+
+.font-pixel-display {
+  font-family: var(--font-display);
+}
+
+/* Pixel Border Utility */
+.border-pixel {
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px #000000;
+}
+
+.border-pixel-green {
+  border: 2px solid #00ff66;
+  box-shadow: 4px 4px 0px #000000;
+}
+
+/* Continuous Marquee Ticker Right-to-Left Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 22s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Subtle Scanline Overlay */
+.scanline-bg {
+  background: linear-gradient(
+    rgba(28, 33, 43, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 3px, 6px 100%;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-marquee {
+    animation: none !important;
+  }
+}

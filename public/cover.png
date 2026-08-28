@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#0a0b0d" />
+  
+  {/* Layered Smoke Clouds */}
+  <circle cx="200" cy="400" r="300" fill="#232730" opacity="0.4" filter="blur(40px)" />
+  <circle cx="1000" cy="350" r="350" fill="#323846" opacity="0.3" filter="blur(50px)" />
+  <rect x="0" y="450" width="1200" height="180" fill="#181a20" opacity="0.8" />
+
+  {/* Leaf Watermark */}
+  <path d="M 600 150 C 400 250, 350 450, 600 550 C 850 450, 800 250, 600 150 Z" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.04" />
+
+  {/* Title: Portion PUNKS */}
+  <text x="100" y="240" font-family="'Press Start 2P', monospace" font-size="72" font-weight="bold" fill="#ffffff" stroke="#000000" stroke-width="3">Portion</text>
+  <text x="100" y="340" font-family="'Press Start 2P', monospace" font-size="72" font-weight="bold" fill="#00ff66" stroke="#000000" stroke-width="3">PUNKS</text>
+  
+  {/* Tagline */}
+  <text x="105" y="400" font-family="'Silkscreen', cursive" font-size="20" fill="#ffffff" letter-spacing="4">"POTIONS FUEL A BRIGHTER TOMORROW"</text>
+  
+  {/* HUD Text */}
+  <text x="100" y="100" font-family="'Press Start 2P', monospace" font-size="14" fill="#00ff66">ON ROBINHOOD CHAIN</text>
+  <text x="900" y="100" font-family="'Press Start 2P', monospace" font-size="14" fill="#00ff66">POTIONS. PUNKS. PROGRESS.</text>
+</svg>

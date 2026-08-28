@@ -1,0 +1,144 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model AdminUser {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String
+  name         String
+  role         String        @default("ADMIN") // SUPER_ADMIN, ADMIN, EDITOR
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  activityLogs ActivityLog[]
+}
+
+model NFT {
+  id             String     @id @default(uuid())
+  tokenId        Int        @unique
+  name           String
+  description    String
+  imageUrl       String
+  animationUrl   String?
+  rarityRank     Int        @default(0)
+  rarityScore    Float      @default(0.0)
+  rarityCategory String     @default("COMMON") // COMMON, RARE, EPIC, LEGENDARY
+  status         String     @default("PUBLISHED") // PUBLISHED, DRAFT
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  traits         NFTTrait[]
+
+  @@index([rarityCategory])
+  @@index([status])
+}
+
+model NFTTrait {
+  id         String   @id @default(uuid())
+  nftId      String
+  nft        NFT      @relation(fields: [nftId], references: [id], onDelete: Cascade)
+  traitType  String
+  traitValue String
+  createdAt  DateTime @default(now())
+
+  @@index([nftId])
+  @@index([traitType])
+}
+
+model Collection {
+  id              String   @id @default(uuid())
+  name            String   @default("Portion Punks")
+  description     String   @default("Portion Punks is a pixel-art NFT collection built around potions, punks, community and the possibilities of a new digital ecosystem.")
+  totalSupply     Int      @default(3333)
+  chain           String   @default("Robinhood Crypto")
+  platform        String   @default("OpenSea")
+  contractAddress String   @default("0x0000000000000000000000000000000000000000")
+  mintDate        String   @default("TBA")
+  mintStatus      String   @default("UPCOMING")
+  mintPrice       String   @default("TBA")
+  openSeaUrl      String   @default("https://opensea.io/collection/portion-punks")
+  updatedAt       DateTime @updatedAt
+}
+
+model RoadmapItem {
+  id           String   @id @default(uuid())
+  phase        String   // e.g. "PHASE 01"
+  title        String   // e.g. "THE BREW"
+  description  String   // Multiline or JSON bullet list
+  status       String   @default("UPCOMING") // COMPLETED, IN_PROGRESS, UPCOMING
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model FAQ {
+  id           String   @id @default(uuid())
+  question     String
+  answer       String
+  category     String   @default("General")
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SocialLink {
+  id           String   @id @default(uuid())
+  platform     String   // DISCORD, TWITTER, OPENSEA
+  title        String
+  url          String
+  iconName     String   @default("link")
+  displayOrder Int      @default(0)
+  active       Boolean  @default(true)
+  updatedAt    DateTime @updatedAt
+}
+
+model SiteSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  label     String
+  group     String   @default("general") // hero, about, links, system
+  updatedAt DateTime @updatedAt
+}
+
+model ActivityLog {
+  id         String     @id @default(uuid())
+  userId     String?
+  user       AdminUser? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userEmail  String
+  action     String     // NFT_CREATE, NFT_UPDATE, SETTINGS_CHANGE, LOGIN, etc.
+  resource   String
+  resourceId String?
+  details    String?
+  ipAddress  String?
+  createdAt  DateTime   @default(now())
+
+  @@index([createdAt])
+}
+
+model CaptchaToken {
+  id        String   @id @default(uuid())
+  question  String   // e.g. "47 + 36 = ?"
+  answer    Int      // 83 (never exposed to client)
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}
+
+model WhitelistSubmission {
+  id            String   @id @default(uuid())
+  walletAddress String
+  email         String?
+  discordHandle String?
+  twitterHandle String?
+  ipAddress     String?
+  createdAt     DateTime @default(now())
+
+  @@unique([walletAddress])
+}

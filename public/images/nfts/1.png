@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="300" height="300" shape-rendering="crispEdges">
+  {/* Dark Charcoal Background */}
+  <rect width="24" height="24" fill="#121418" />
+  
+  {/* Smoke Cloud Base */}
+  <rect x="0" y="18" width="24" height="6" fill="#232730" />
+  <rect x="2" y="19" width="20" height="5" fill="#323846" />
+  <rect x="5" y="20" width="14" height="4" fill="#e5e9f0" opacity="0.3" />
+
+  {/* Punk Character Body */}
+  <rect x="8" y="11" width="8" height="10" fill="#8B4513" />
+  <rect x="7" y="12" width="10" height="9" fill="#A0522D" />
+
+  {/* Head / Skin - Mint Green */}
+  <rect x="7" y="5" width="10" height="8" fill="#00ff66" />
+  <rect x="6" y="6" width="12" height="6" fill="#00ff66" />
+
+  {/* Red Potion Cap */}
+  <rect x="6" y="3" width="12" height="3" fill="#DC2626" />
+  <rect x="5" y="4" width="14" height="2" fill="#EF4444" />
+  <rect x="14" y="2" width="4" height="2" fill="#B91C1C" />
+
+  {/* Glasses / Visor - Purple/Pink */}
+  <rect x="7" y="7" width="4" height="2" fill="#A855F7" />
+  <rect x="13" y="7" width="4" height="2" fill="#A855F7" />
+  <rect x="11" y="7.5" width="2" height="1" fill="#ff2a85" />
+
+  {/* Beard - Reddish Brown */}
+  <rect x="6" y="10" width="12" height="3" fill="#991B1B" />
+
+  {/* Integrated Potion Earring */}
+  <rect x="5" y="8" width="2" height="3" fill="#ff2a85" />
+  <rect x="5.5" y="7.5" width="1" height="1" fill="#00ff66" />
+
+  {/* Black Pixel Outline */}
+  <path d="M 6 3 H 18 V 6 H 19 V 12 H 18 V 21 H 6 V 12 H 5 V 6 H 6 Z" fill="none" stroke="#000" strokeWidth="0.5" />
+</svg>
