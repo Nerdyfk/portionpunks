@@ -57,6 +57,7 @@ const DEFAULT_PHASES: RoadmapItem[] = [
 
 export default function RoadmapSection() {
   const [phases, setPhases] = useState<RoadmapItem[]>(DEFAULT_PHASES);
+  const [showOpenseaComingSoon, setShowOpenseaComingSoon] = useState(false);
 
   useEffect(() => {
     fetch('/api/public/settings')
@@ -154,21 +155,34 @@ export default function RoadmapSection() {
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
             </svg>
           </a>
-          <a
-            href="https://opensea.io/collection/portion-punks"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-12 h-12 glass-panel hover:border-gold-400 text-smoke-200 hover:text-gold-400 flex items-center justify-center rounded-full transition-all duration-300"
-            aria-label="OpenSea"
-          >
-            <svg viewBox="0 0 32 32" className="w-6 h-6">
-              <circle cx="16" cy="16" r="14" fill="#2081E2" />
-              <path
-                d="M8.5 20.2c.4 2.8 14.6 2.8 15 0H8.5zm6.7-11.8c-2.8 4.2-4.5 7.6-6 9.8h6V8.4zm1.6-1.9c3.2 4.4 5.2 8.1 6 11.7h-6V6.5z"
-                fill="#FFFFFF"
-              />
-            </svg>
-          </a>
+          
+          <div className="relative">
+            {showOpenseaComingSoon && (
+              <div
+                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 rounded-full bg-gold-400 text-charcoal-950 text-[10px] font-bold tracking-[0.16em] uppercase whitespace-nowrap shadow-lg animate-bounce z-20"
+              >
+                Coming Soon
+                <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gold-400" />
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                setShowOpenseaComingSoon(true);
+                setTimeout(() => setShowOpenseaComingSoon(false), 2500);
+              }}
+              className="w-12 h-12 glass-panel hover:border-gold-400 text-smoke-200 hover:text-gold-400 flex items-center justify-center rounded-full transition-all duration-300 cursor-pointer"
+              aria-label="OpenSea (Coming Soon)"
+            >
+              <svg viewBox="0 0 32 32" className="w-6 h-6">
+                <circle cx="16" cy="16" r="14" fill="#2081E2" />
+                <path
+                  d="M8.5 20.2c.4 2.8 14.6 2.8 15 0H8.5zm6.7-11.8c-2.8 4.2-4.5 7.6-6 9.8h6V8.4zm1.6-1.9c3.2 4.4 5.2 8.1 6 11.7h-6V6.5z"
+                  fill="#FFFFFF"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
       </div>

@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function Footer() {
+  const [showComingSoon, setShowComingSoon] = useState(false);
   return (
     <footer className="relative z-10 border-t border-gold-400/15 pt-16 pb-12 text-smoke-400 text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,9 +45,19 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="https://opensea.io/collection/portion-punks" target="_blank" rel="noreferrer" className="hover:text-gold-400 transition-colors">
-                  OpenSea collection
-                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowComingSoon(true);
+                    setTimeout(() => setShowComingSoon(false), 2500);
+                  }}
+                  className="hover:text-gold-400 transition-colors flex items-center gap-2 cursor-pointer text-left"
+                >
+                  <span>OpenSea collection</span>
+                  <span className="text-[10px] tracking-wider uppercase text-gold-400/90 bg-gold-400/10 border border-gold-400/30 px-1.5 py-0.5 rounded">
+                    {showComingSoon ? 'Coming Soon!' : 'Coming Soon'}
+                  </span>
+                </button>
               </li>
             </ul>
           </div>
