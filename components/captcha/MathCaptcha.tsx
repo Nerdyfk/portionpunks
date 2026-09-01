@@ -133,22 +133,22 @@ export default function MathCaptcha({
   };
 
   return (
-    <div className="bg-charcoal-900 border-2 border-smoke-800 p-4 rounded-sm shadow-md font-sans">
-      <div className="flex items-center justify-between mb-3 border-b border-smoke-800 pb-2">
-        <div className="flex items-center space-x-2 text-xs font-pixel-display text-white">
-          <ShieldCheck className="w-4 h-4 text-neon-green" />
-          <span>SECURITY CHECK</span>
+    <div className="glass-panel p-4">
+      <div className="flex items-center justify-between mb-3 border-b border-gold-400/15 pb-2">
+        <div className="flex items-center space-x-2 text-[11px] tracking-[0.18em] uppercase text-smoke-200">
+          <ShieldCheck className="w-4 h-4 text-gold-400" />
+          <span>Security check</span>
         </div>
 
         {/* Timer display */}
         {!loading && captchaData && (
           <div
-            className={`flex items-center space-x-1 text-[11px] font-pixel-display px-2 py-0.5 border rounded-sm ${
+            className={`flex items-center space-x-1 text-[11px] px-2 py-0.5 border rounded-full ${
               isExpired
                 ? 'bg-red-500/20 text-red-400 border-red-500/40'
                 : secondsRemaining <= 10
                 ? 'bg-amber-500/20 text-amber-400 border-amber-500/40 animate-pulse'
-                : 'bg-neon-green/10 text-neon-green border-neon-green/30'
+                : 'bg-gold-400/10 text-gold-400 border-gold-400/30'
             }`}
           >
             <Clock className="w-3 h-3" />
@@ -165,7 +165,7 @@ export default function MathCaptcha({
         <div className="space-y-3">
           {/* Question Display */}
           <div className="flex items-center justify-between bg-charcoal-950 p-3 border border-smoke-800 rounded-sm">
-            <div className="font-pixel-heading text-sm text-neon-green tracking-wider">
+            <div className="font-serif-display text-xl text-gold-400 tracking-wider">
               {captchaData?.question || '28 + 43 = ?'}
             </div>
 
@@ -174,7 +174,7 @@ export default function MathCaptcha({
               type="button"
               onClick={handleManualRefresh}
               disabled={refreshing}
-              className="font-pixel-display text-[10px] px-2.5 py-1 bg-charcoal-800 hover:bg-charcoal-700 text-smoke-200 border border-smoke-700 hover:border-neon-green transition-colors flex items-center space-x-1.5 rounded-sm"
+              className="text-[10px] tracking-widest uppercase px-2.5 py-1 btn-ghost rounded-full flex items-center space-x-1.5"
               title="Refresh CAPTCHA prompt"
             >
               <RotateCw className={`w-3 h-3 text-neon-green ${refreshing ? 'animate-spin' : ''}`} />
@@ -190,10 +190,10 @@ export default function MathCaptcha({
               value={userAnswer}
               onChange={handleAnswerChange}
               disabled={isExpired}
-              className={`w-full bg-charcoal-850 border text-white text-xs px-3.5 py-2.5 focus:outline-none font-mono rounded-sm ${
+              className={`w-full bg-charcoal-950/70 border text-smoke-100 text-sm px-3.5 py-2.5 focus:outline-none font-mono rounded-sm ${
                 isExpired
                   ? 'border-red-500/50 bg-red-950/20 cursor-not-allowed text-smoke-500'
-                  : 'border-smoke-700 focus:border-neon-green'
+                  : 'border-gold-400/20 focus:border-gold-400'
               }`}
             />
           </div>

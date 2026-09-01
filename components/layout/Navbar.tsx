@@ -14,112 +14,105 @@ export default function Navbar({ onOpenWhitelist }: NavbarProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 24);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
-    { name: 'HOME', href: '#hero' },
-    { name: 'ABOUT', href: '#about' },
-    { name: 'ROADMAP', href: '#roadmap' },
+    { name: 'Home', href: '#hero' },
+    { name: 'About', href: '#about' },
+    { name: 'Collection', href: '#collection' },
+    { name: 'Roadmap', href: '#roadmap' },
+    { name: 'FAQ', href: '#faq' },
   ];
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? 'bg-charcoal-950/85 backdrop-blur-md border-b border-smoke-800/80 py-3 shadow-lg'
+            ? 'bg-charcoal-950/70 backdrop-blur-xl border-b border-gold-400/15 py-3 shadow-gold'
             : 'bg-transparent py-5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Logo Left */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="flex items-center space-x-1.5 font-pixel-heading text-lg sm:text-xl font-bold text-white tracking-tight">
-              <span className="text-white drop-shadow-[0_2px_0_rgba(0,0,0,1)]">PORTION</span>
-              {/* Integrated Potion Bottle Icon */}
-              <div className="w-5 h-6 relative mx-0.5 inline-block align-middle transform group-hover:rotate-12 transition-transform">
-                <svg viewBox="0 0 24 28" fill="none" className="w-full h-full">
-                  <path d="M9 2H15V6H9V2Z" fill="#8B5CF6" stroke="#000" strokeWidth="2" />
-                  <path d="M6 7H18V11L21 16V25H3V16L6 11V7Z" fill="#ff2a85" stroke="#000" strokeWidth="2" />
-                  <path d="M8 15H16V22H8V15Z" fill="#00ff66" opacity="0.6" />
-                </svg>
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="w-8 h-9 relative">
+              <svg viewBox="0 0 24 28" fill="none" className="w-full h-full">
+                <path d="M9 2H15V6H9V2Z" fill="#d4af77" stroke="#d4af77" strokeWidth="1.4" />
+                <path d="M6 7H18V11L21 16V25H3V16L6 11V7Z" fill="#12141c" stroke="#d4af77" strokeWidth="1.4" />
+                <path d="M8 15H16V22H8V15Z" fill="#3ee08a" opacity="0.75" />
+              </svg>
+            </div>
+            <div className="leading-none">
+              <div className="font-serif-display text-xl sm:text-2xl tracking-wide text-smoke-100 group-hover:text-gold-400 transition-colors">
+                Portion <span className="italic text-gold-400">Punks</span>
               </div>
-              <span className="text-neon-green drop-shadow-[0_2px_0_rgba(0,0,0,1)]">PUNKS</span>
             </div>
           </Link>
 
-          {/* Desktop Nav Links */}
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="font-pixel-display text-xs tracking-wider text-smoke-200 hover:text-neon-green transition-colors relative py-1 group"
+                className="text-[12px] tracking-[0.18em] uppercase text-smoke-400 hover:text-gold-400 transition-colors relative py-1 group"
               >
                 {link.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-neon-green transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold-400 transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
           </nav>
 
-          {/* Right Action Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             {onOpenWhitelist && (
               <button
                 onClick={onOpenWhitelist}
-                className="font-pixel-display text-xs px-5 py-2.5 bg-neon-green/10 text-neon-green border border-neon-green/40 hover:border-neon-green hover:bg-neon-green/20 transition-all rounded-sm shadow-[0_0_10px_rgba(0,255,102,0.2)] font-bold tracking-wider"
+                className="btn-gold text-[11px] px-5 py-2.5 rounded-full"
               >
-                JOIN WHITELIST
+                Join Whitelist
               </button>
             )}
           </div>
 
-          {/* Mobile Hamburger Toggle */}
-          <div className="md:hidden flex items-center space-x-3">
+          <div className="md:hidden flex items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-white bg-charcoal-800 border border-smoke-700 rounded-sm focus:outline-none"
+              className="p-2 text-gold-400 border border-gold-400/30 rounded-full"
               aria-label="Toggle Navigation Menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5 text-neon-green" /> : <Menu className="w-5 h-5 text-white" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-charcoal-950/95 backdrop-blur-xl md:hidden flex flex-col justify-center px-8 py-20 border-b border-smoke-800 animate-fadeIn">
+        <div className="fixed inset-0 z-40 bg-charcoal-950/96 backdrop-blur-2xl md:hidden flex flex-col justify-center px-8 py-20">
           <div className="flex flex-col space-y-6 text-center">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="font-pixel-display text-sm text-white hover:text-neon-green transition-colors py-2 border-b border-smoke-850"
+                className="font-serif-display text-3xl text-smoke-100 hover:text-gold-400 transition-colors"
               >
                 {link.name}
               </a>
             ))}
 
-            <div className="pt-6 flex flex-col space-y-4">
+            <div className="pt-8">
               {onOpenWhitelist && (
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     onOpenWhitelist();
                   }}
-                  className="font-pixel-display text-xs w-full py-3 bg-neon-green text-charcoal-950 font-bold border-2 border-black shadow-pixel-black"
+                  className="btn-gold text-xs w-full py-3.5 rounded-full"
                 >
-                  JOIN WHITELIST
+                  Join Whitelist
                 </button>
               )}
             </div>

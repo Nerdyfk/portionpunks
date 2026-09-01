@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark scroll-smooth">
-      <body className="bg-charcoal-950 text-white min-h-screen flex flex-col font-sans selection:bg-neon-green selection:text-charcoal-950">
+      <body className="bg-charcoal-950 text-smoke-100 min-h-screen flex flex-col font-sans selection:bg-gold-400 selection:text-charcoal-950 antialiased">
         {children}
       </body>
     </html>

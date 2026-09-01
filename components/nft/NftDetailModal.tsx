@@ -50,7 +50,7 @@ export default function NftDetailModal({ nft, onClose, openSeaUrl }: NftDetailMo
       onClick={onClose}
     >
       <div
-        className="bg-charcoal-900 border-2 border-smoke-700 w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 relative shadow-2xl rounded-sm text-white"
+        className="glass-panel w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 relative text-smoke-100"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}

@@ -190,26 +190,26 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-950/85 backdrop-blur-md animate-fadeIn font-sans">
-      <div className="bg-charcoal-900 border-2 border-smoke-800 w-full max-w-xl p-6 relative shadow-2xl rounded-sm text-white max-h-[92vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-950/80 backdrop-blur-xl">
+      <div className="glass-panel w-full max-w-xl p-7 relative text-smoke-100 max-h-[92vh] overflow-y-auto">
         
         {/* Close Button */}
         {onClose && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-smoke-400 hover:text-white transition-colors"
+            className="absolute top-5 right-5 text-smoke-400 hover:text-gold-400 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         )}
 
         {/* Modal Header */}
-        <div className="mb-5 border-b border-smoke-800 pb-3">
-          <h2 className="font-pixel-heading text-sm sm:text-base text-white tracking-wide mb-1 uppercase">
-            PORTION PUNKS WHITELIST QUESTS
+        <div className="mb-6 border-b border-gold-400/15 pb-4">
+          <h2 className="font-serif-display text-3xl text-smoke-100 mb-2">
+            Whitelist <span className="italic text-gold-400">quests</span>
           </h2>
-          <p className="text-xs text-smoke-400 font-sans">
-            Complete the quests and enter proof details to reserve your placement.
+          <p className="text-sm text-smoke-400 font-light">
+            Complete the quests and enter proof to reserve your placement.
           </p>
         </div>
 
@@ -218,14 +218,14 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
             <div className="w-16 h-16 bg-amber-500/20 border-2 border-amber-500 text-amber-400 rounded-full flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(245,158,11,0.3)]">
               <PauseCircle className="w-8 h-8" />
             </div>
-            <h4 className="font-pixel-heading text-base text-white">WHITELIST PAUSED</h4>
+            <h4 className="font-serif-display text-2xl text-smoke-100">Whitelist paused</h4>
             <p className="text-xs text-smoke-300 font-sans leading-relaxed max-w-md mx-auto">
               Whitelist registrations are currently PAUSED by administration. Check back soon or follow @portionpunks on X for updates.
             </p>
             {onClose && (
               <button
                 onClick={onClose}
-                className="w-full py-3 bg-charcoal-800 hover:bg-charcoal-700 text-white font-pixel-display text-xs border border-smoke-700 rounded-sm"
+                className="w-full py-3 btn-ghost rounded-full text-[11px]"
               >
                 CLOSE WINDOW
               </button>
@@ -233,17 +233,17 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
           </div>
         ) : successMessage ? (
           <div className="py-6 text-center space-y-4">
-            <div className="w-16 h-16 bg-neon-green/20 border-2 border-neon-green text-neon-green rounded-full flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(0,255,102,0.4)]">
+            <div className="w-16 h-16 bg-gold-400/15 border border-gold-400 text-gold-400 rounded-full flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h4 className="font-pixel-heading text-base text-white">WHITELIST CONFIRMED</h4>
+            <h4 className="font-serif-display text-2xl text-smoke-100">Whitelist confirmed</h4>
             <p className="text-xs text-smoke-300 font-sans leading-relaxed max-w-md mx-auto">
               {successMessage}
             </p>
             {onClose && (
               <button
                 onClick={onClose}
-                className="w-full py-3 bg-[#f3c246] text-charcoal-950 font-pixel-display text-xs font-bold border-2 border-black rounded-sm shadow-pixel-black hover:bg-[#e2b135] transition-colors"
+                className="w-full py-3.5 btn-gold rounded-full text-[11px]"
               >
                 RETURN TO WEBSITE
               </button>
@@ -252,8 +252,8 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             
-            <div className="text-xs font-pixel-display text-white tracking-wider uppercase mb-1">
-              WHITELIST QUESTS
+            <div className="text-[11px] tracking-[0.22em] uppercase text-gold-400 mb-1">
+              Whitelist quests
             </div>
 
             {/* Dynamic Tasks / Quests */}
@@ -266,7 +266,7 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
                 return (
                   <div 
                     key={task.id} 
-                    className="bg-charcoal-900 border-2 border-smoke-800 p-4 rounded-sm shadow-md font-sans space-y-3"
+                    className="glass-panel p-4 space-y-3"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
@@ -279,18 +279,18 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
                           href={task.url || 'https://x.com/potionpunks'}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-pixel-display text-xs text-white hover:text-neon-green underline underline-offset-4 cursor-pointer uppercase transition-colors"
+                          className="text-sm text-smoke-100 hover:text-gold-400 underline underline-offset-4 cursor-pointer uppercase transition-colors tracking-wide"
                         >
                           {task.title}
                         </a>
                       </div>
 
                       {task.required ? (
-                        <span className="bg-[#332811] border border-[#947629] text-[#f59e0b] text-[9px] font-pixel-display px-2 py-0.5 rounded-sm uppercase tracking-wider shrink-0 ml-2">
-                          REQUIRED
+                        <span className="border border-gold-400/40 text-gold-400 text-[9px] px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0 ml-2">
+                          Required
                         </span>
                       ) : (
-                        <span className="bg-charcoal-850 border border-smoke-700 text-smoke-400 text-[9px] font-pixel-display px-2 py-0.5 rounded-sm uppercase tracking-wider shrink-0 ml-2">
+                        <span className="border border-smoke-700 text-smoke-400 text-[9px] px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0 ml-2">
                           OPTIONAL
                         </span>
                       )}
@@ -303,10 +303,10 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
                         placeholder={placeholderText}
                         value={taskProofs[task.id] || ''}
                         onChange={(e) => handleProofChange(task.id, e.target.value, isFollowTask)}
-                        className={`w-full bg-charcoal-850 border text-white text-xs px-3.5 py-2.5 focus:outline-none font-mono rounded-sm ${
+                        className={`w-full bg-charcoal-950/70 border text-smoke-100 text-sm px-3.5 py-2.5 focus:outline-none font-mono rounded-sm ${
                           hasError
                             ? 'border-red-500/80 focus:border-red-400 bg-red-950/20'
-                            : 'border-smoke-700 focus:border-neon-green'
+                            : 'border-gold-400/20 focus:border-gold-400'
                         }`}
                       />
                       {hasError && (
@@ -321,19 +321,19 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
               })}
 
               {/* Wallet Address Quest Card */}
-              <div className="bg-charcoal-900 border-2 border-smoke-800 p-4 rounded-sm shadow-md font-sans space-y-3">
+              <div className="glass-panel p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-charcoal-950 border border-smoke-800 rounded-sm flex items-center justify-center text-smoke-300 shrink-0">
-                      <Wallet className="w-4 h-4 text-neon-green" />
+                    <div className="w-8 h-8 border border-gold-400/20 rounded-full flex items-center justify-center text-gold-400 shrink-0">
+                      <Wallet className="w-4 h-4" />
                     </div>
-                    <span className="font-pixel-display text-xs text-white uppercase">
-                      SUBMIT EVM WALLET ADDRESS
+                    <span className="text-sm text-smoke-100 uppercase tracking-wide">
+                      Submit EVM wallet address
                     </span>
                   </div>
 
-                  <span className="bg-[#332811] border border-[#947629] text-[#f59e0b] text-[9px] font-pixel-display px-2 py-0.5 rounded-sm uppercase tracking-wider shrink-0">
-                    REQUIRED
+                  <span className="border border-gold-400/40 text-gold-400 text-[9px] px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0">
+                    Required
                   </span>
                 </div>
 
@@ -344,7 +344,7 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
                     placeholder="0x1234567890abcdef1234567890abcdef12345678"
                     value={walletAddress}
                     onChange={(e) => setWalletAddress(e.target.value)}
-                    className="w-full bg-charcoal-850 border border-smoke-700 focus:border-neon-green text-white placeholder-smoke-500 text-xs px-3.5 py-2.5 focus:outline-none font-mono rounded-sm"
+                    className="w-full bg-charcoal-950/70 border border-gold-400/20 focus:border-gold-400 text-smoke-100 placeholder-smoke-500 text-sm px-3.5 py-2.5 focus:outline-none font-mono rounded-sm"
                   />
                 </div>
               </div>
@@ -368,10 +368,10 @@ export default function WhitelistForm({ isOpen = true, onClose }: WhitelistFormP
               <button
                 type="submit"
                 disabled={!captchaValid || submitting}
-                className={`w-full py-3.5 font-pixel-display text-xs font-bold uppercase rounded-sm border-2 border-black shadow-pixel-black transition-all flex items-center justify-center space-x-2 ${
+                className={`w-full py-3.5 text-[11px] tracking-[0.16em] uppercase rounded-full transition-all flex items-center justify-center space-x-2 ${
                   captchaValid && !submitting
-                    ? 'bg-[#f3c246] text-charcoal-950 hover:bg-[#e2b135] cursor-pointer'
-                    : 'bg-smoke-800 text-smoke-500 border-smoke-700 cursor-not-allowed opacity-60'
+                    ? 'btn-gold cursor-pointer'
+                    : 'bg-charcoal-800 text-smoke-500 border border-smoke-700 cursor-not-allowed opacity-60'
                 }`}
               >
                 {submitting ? (

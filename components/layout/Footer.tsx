@@ -1,90 +1,65 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 bg-charcoal-950 border-t border-smoke-800/80 pt-16 pb-12 overflow-hidden text-smoke-400 font-sans text-xs">
-      
-      {/* Subtle Smoke Footer Overlay */}
-      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-smoke-900/30 to-transparent pointer-events-none filter blur-xl" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-smoke-850">
-          
-          {/* Brand Info */}
+    <footer className="relative z-10 border-t border-gold-400/15 pt-16 pb-12 text-smoke-400 text-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-12 border-b border-gold-400/10">
           <div className="md:col-span-5 space-y-4">
-            <div className="flex items-center space-x-1.5 font-pixel-heading text-lg font-bold text-white tracking-tight">
-              <span className="text-white">PORTION</span>
-              <span className="text-neon-green">PUNKS</span>
+            <div className="font-serif-display text-2xl text-smoke-100">
+              Portion <span className="italic text-gold-400">Punks</span>
             </div>
-
-            <p className="font-pixel-display text-xs text-white tracking-wide">
-              "POTIONS FUEL A BRIGHTER TOMORROW"
+            <p className="font-serif-display italic text-gold-400">
+              Potions fuel a brighter tomorrow.
             </p>
-
-            <p className="text-smoke-400 text-xs max-w-sm leading-relaxed">
-              Portion Punks is a digital collection built on the Robinhood Crypto ecosystem. 3333 unique pixel punks.
+            <p className="text-smoke-400 max-w-sm leading-relaxed font-light">
+              A collection of 3,333 unique pixel Punks on the Robinhood Crypto ecosystem.
             </p>
-
-            <div className="text-[10px] font-pixel-display text-smoke-500 pt-1">
-              CHAIN: <span className="text-neon-green">ROBINHOOD CRYPTO</span> | PLATFORM: <span className="text-neon-green">OPENSEA</span>
+            <div className="text-[11px] tracking-[0.18em] uppercase text-smoke-500 pt-1">
+              Chain <span className="text-gold-400">Robinhood Crypto</span>
+              <span className="mx-2">·</span>
+              Market <span className="text-gold-400">OpenSea</span>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="md:col-span-3 space-y-3">
-            <h4 className="font-pixel-display text-xs text-white">NAVIGATION</h4>
-            <ul className="space-y-2 text-xs">
-              <li><a href="#hero" className="hover:text-neon-green transition-colors">Home</a></li>
-              <li><a href="#about" className="hover:text-neon-green transition-colors">About Portion Punks</a></li>
-              <li><a href="#roadmap" className="hover:text-neon-green transition-colors">Roadmap Milestones</a></li>
+          <div className="md:col-span-3 space-y-4">
+            <h4 className="text-[11px] tracking-[0.22em] uppercase text-gold-400">Navigation</h4>
+            <ul className="space-y-2">
+              <li><a href="#hero" className="hover:text-gold-400 transition-colors">Home</a></li>
+              <li><a href="#about" className="hover:text-gold-400 transition-colors">About</a></li>
+              <li><a href="#collection" className="hover:text-gold-400 transition-colors">Collection</a></li>
+              <li><a href="#roadmap" className="hover:text-gold-400 transition-colors">Roadmap</a></li>
+              <li><a href="#faq" className="hover:text-gold-400 transition-colors">FAQ</a></li>
             </ul>
           </div>
 
-          {/* Socials & Marketplace Links */}
-          <div className="md:col-span-4 space-y-3">
-            <h4 className="font-pixel-display text-xs text-white">ECOSYSTEM & LINKS</h4>
-            <ul className="space-y-2 text-xs">
+          <div className="md:col-span-4 space-y-4">
+            <h4 className="text-[11px] tracking-[0.22em] uppercase text-gold-400">Ecosystem</h4>
+            <ul className="space-y-2">
               <li>
-                <a
-                  href="https://x.com/potionpunks"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-neon-green transition-colors"
-                >
-                  Follow on X (@potionpunks)
+                <a href="https://x.com/potionpunks" target="_blank" rel="noreferrer" className="hover:text-gold-400 transition-colors">
+                  X — @potionpunks
                 </a>
               </li>
               <li>
-                <a
-                  href="https://opensea.io/collection/portion-punks"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-neon-green transition-colors"
-                >
-                  OpenSea Collection
+                <a href="https://opensea.io/collection/portion-punks" target="_blank" rel="noreferrer" className="hover:text-gold-400 transition-colors">
+                  OpenSea collection
                 </a>
               </li>
             </ul>
           </div>
-
         </div>
 
-        {/* Bottom Legal Copyright */}
-        <div className="pt-8 flex flex-col sm:flex-row justify-between items-center text-[11px] text-smoke-500 space-y-4 sm:space-y-0">
-          <div>
-            © {new Date().getFullYear()} PORTION PUNKS. ALL RIGHTS RESERVED.
-          </div>
+        <div className="pt-8 flex flex-col sm:flex-row justify-between items-center text-[11px] tracking-[0.16em] uppercase text-smoke-500 space-y-4 sm:space-y-0">
+          <div>© {new Date().getFullYear()} Portion Punks. All rights reserved.</div>
           <div className="flex space-x-6">
-            <span>TERMS</span>
-            <span>PRIVACY</span>
-            <span>DISCLAIMER</span>
+            <span>Terms</span>
+            <span>Privacy</span>
+            <span>Disclaimer</span>
           </div>
         </div>
-
       </div>
     </footer>
   );

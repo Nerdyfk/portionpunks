@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=Press+Start+2P&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,62 +6,54 @@
 
 :root {
   --font-pixel: 'Press Start 2P', monospace;
-  --font-display: 'Silkscreen', cursive;
-  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Cormorant Garamond', serif;
+  --font-sans: 'Outfit', system-ui, sans-serif;
+  --gold: #d4af77;
+  --gold-soft: rgba(212, 175, 119, 0.18);
+  --ink: #07080c;
 }
 
 body {
-  background-color: #1c212b;
-  color: #e5e9f0;
+  background-color: var(--ink);
+  color: #ece7dc;
   font-family: var(--font-sans);
   overflow-x: hidden;
 }
 
-/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #1c212b;
+  background: #07080c;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2e3644;
-  border-radius: 2px;
-  border: 1px solid #00ff66;
+  background: linear-gradient(180deg, #d4af77, #3a2e1c);
+  border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00ff66;
+  background: #d4af77;
 }
 
-/* Pixel Art Rendering Rules */
 .pixelated {
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
 }
 
-/* HUD Text Styles */
 .font-pixel-heading {
   font-family: var(--font-pixel);
   letter-spacing: -0.05em;
 }
 
 .font-pixel-display {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.08em;
+}
+
+.font-serif-display {
   font-family: var(--font-display);
 }
 
-/* Pixel Border Utility */
-.border-pixel {
-  border: 2px solid #000000;
-  box-shadow: 3px 3px 0px #000000;
-}
-
-.border-pixel-green {
-  border: 2px solid #00ff66;
-  box-shadow: 4px 4px 0px #000000;
-}
-
-/* Continuous Marquee Ticker Right-to-Left Animation */
 @keyframes marquee {
   0% {
     transform: translateX(0%);
@@ -74,28 +66,118 @@ body {
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 22s linear infinite;
+  animation: marquee 28s linear infinite;
 }
 
 .animate-marquee:hover {
   animation-play-state: paused;
 }
 
-/* Subtle Scanline Overlay */
 .scanline-bg {
   background: linear-gradient(
-    rgba(28, 33, 43, 0) 50%, 
-    rgba(0, 0, 0, 0.25) 50%
-  ), linear-gradient(
-    90deg,
-    rgba(255, 0, 0, 0.03),
-    rgba(0, 255, 0, 0.01),
-    rgba(0, 0, 255, 0.03)
+    rgba(7, 8, 12, 0) 50%,
+    rgba(0, 0, 0, 0.18) 50%
   );
-  background-size: 100% 3px, 6px 100%;
+  background-size: 100% 3px;
 }
 
-/* Reduced Motion Override */
+.film-grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.glass-panel {
+  background: linear-gradient(180deg, rgba(18, 20, 28, 0.78), rgba(10, 11, 16, 0.88));
+  border: 1px solid rgba(212, 175, 119, 0.22);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px);
+}
+
+.gold-hairline {
+  border: 1px solid rgba(212, 175, 119, 0.28);
+}
+
+.section-kicker {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #d4af77;
+}
+
+.btn-gold {
+  background: linear-gradient(180deg, #e8d5a8 0%, #d4af77 48%, #b8924f 100%);
+  color: #1a140c;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow:
+    0 8px 24px rgba(212, 175, 119, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.btn-gold:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(212, 175, 119, 0.32);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.03);
+  color: #ece7dc;
+  border: 1px solid rgba(212, 175, 119, 0.35);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.btn-ghost:hover {
+  background: rgba(212, 175, 119, 0.08);
+  border-color: #d4af77;
+  color: #fff;
+}
+
+.ornate-frame {
+  position: relative;
+  border: 1px solid rgba(212, 175, 119, 0.35);
+  box-shadow:
+    0 0 0 8px rgba(7, 8, 12, 0.55),
+    0 30px 80px rgba(0, 0, 0, 0.55),
+    inset 0 0 40px rgba(212, 175, 119, 0.06);
+}
+
+.ornate-frame::before,
+.ornate-frame::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: #d4af77;
+  pointer-events: none;
+}
+.ornate-frame::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+.ornate-frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,

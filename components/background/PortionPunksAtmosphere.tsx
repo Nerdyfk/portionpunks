@@ -140,14 +140,13 @@ export default function PortionPunksAtmosphere({ config: customConfig }: Portion
   const frontSmokeY = mousePos.y * 4 * pStr + scrollY * 0.25;
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#1c212b]">
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#07080c]">
       
-      {/* LAYER 0: Grey Smoke Base Atmosphere */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#1c212b] via-[#262d3a] to-[#1c212b] opacity-100" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#07080c] via-[#10131a] to-[#07080c]" />
 
       {/* LAYER 0.5: Giant Robinhood Feather Watermark Motif */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] opacity-[0.12] filter blur-[1px] pointer-events-none z-0">
-        <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-neon-green">
+        <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-gold-400">
           <path
             d="M50 5 C 20 30, 10 70, 50 95 C 90 70, 80 30, 50 5 Z M 50 95 L 50 25"
             stroke="currentColor"
@@ -234,7 +233,7 @@ export default function PortionPunksAtmosphere({ config: customConfig }: Portion
                   animationDelay: `${leaf.delay}s`,
                 }}
               >
-                <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-neon-green filter drop-shadow-[0_0_8px_rgba(0,255,102,0.4)]">
+                <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-gold-400/70 filter drop-shadow-[0_0_8px_rgba(212,175,119,0.35)]">
                   <path
                     d="M12 2C6 8 4 16 12 22C20 16 18 8 12 2Z"
                     stroke="currentColor"
@@ -265,13 +264,13 @@ export default function PortionPunksAtmosphere({ config: customConfig }: Portion
                 width: `${p.size}px`,
                 height: `${p.size}px`,
                 backgroundColor:
-                  p.color === 'pink' ? '#ff2a85' : p.color === 'white' ? '#ffffff' : '#00ff66',
+                  p.color === 'pink' ? '#e85a9b' : p.color === 'white' ? '#ece7dc' : '#d4af77',
                 boxShadow:
                   p.color === 'pink'
                     ? '0 0 8px rgba(255, 42, 133, 0.8)'
                     : p.color === 'white'
                     ? '0 0 6px rgba(255, 255, 255, 0.8)'
-                    : '0 0 8px rgba(0, 255, 102, 0.8)',
+                    : '0 0 8px rgba(212, 175, 119, 0.7)',
                 opacity: p.opacity,
                 animationDuration: `${p.duration}s`,
                 animationDelay: `${p.delay}s`,
