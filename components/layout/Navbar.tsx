@@ -23,7 +23,6 @@ export default function Navbar({ onOpenWhitelist }: NavbarProps) {
   const navLinks = [
     { name: 'Home', href: '#hero' },
     { name: 'About', href: '#about' },
-    { name: 'Collection', href: '#collection' },
     { name: 'Roadmap', href: '#roadmap' },
     { name: 'FAQ', href: '#faq' },
   ];
