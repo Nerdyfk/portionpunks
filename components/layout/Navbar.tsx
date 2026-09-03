@@ -25,6 +25,7 @@ export default function Navbar({ onOpenWhitelist }: NavbarProps) {
     { name: 'About', href: '#about' },
     { name: 'Roadmap', href: '#roadmap' },
     { name: 'FAQ', href: '#faq' },
+    { name: 'Whitepaper', href: '/whitepaper' },
   ];
 
   return (
@@ -53,16 +54,27 @@ export default function Navbar({ onOpenWhitelist }: NavbarProps) {
           </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-[12px] tracking-[0.18em] uppercase text-smoke-400 hover:text-gold-400 transition-colors relative py-1 group"
-              >
-                {link.name}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold-400 transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.href.startsWith('/') ? (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="text-[12px] tracking-[0.18em] uppercase text-smoke-400 hover:text-gold-400 transition-colors relative py-1 group"
+                >
+                  {link.name}
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold-400 transition-all duration-300 group-hover:w-full" />
+                </Link>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-[12px] tracking-[0.18em] uppercase text-smoke-400 hover:text-gold-400 transition-colors relative py-1 group"
+                >
+                  {link.name}
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold-400 transition-all duration-300 group-hover:w-full" />
+                </a>
+              )
+            )}
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
@@ -91,16 +103,27 @@ export default function Navbar({ onOpenWhitelist }: NavbarProps) {
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-charcoal-950/96 backdrop-blur-2xl md:hidden flex flex-col justify-center px-8 py-20">
           <div className="flex flex-col space-y-6 text-center">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="font-serif-display text-3xl text-smoke-100 hover:text-gold-400 transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.href.startsWith('/') ? (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="font-serif-display text-3xl text-smoke-100 hover:text-gold-400 transition-colors"
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="font-serif-display text-3xl text-smoke-100 hover:text-gold-400 transition-colors"
+                >
+                  {link.name}
+                </a>
+              )
+            )}
 
             <div className="pt-8">
               {onOpenWhitelist && (

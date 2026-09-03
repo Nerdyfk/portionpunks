@@ -38,6 +38,24 @@ export async function GET() {
     });
   } catch (error) {
     console.error('Error fetching public settings:', error);
-    return NextResponse.json({ error: 'Failed to load site content' }, { status: 500 });
+    // Return fallback defaults when DB is unavailable
+    return NextResponse.json({
+      collection: {
+        name: 'Portion Punks',
+        description: '3333 unique Potion Punks forged for digital collectors on Robinhood Crypto.',
+        totalSupply: 3333,
+        chain: 'Robinhood Crypto',
+        platform: 'OpenSea',
+        contractAddress: '0x3333777788889999aaaabbbbccccddddeeeeffff',
+        mintDate: 'TBA',
+        mintStatus: 'UPCOMING',
+        mintPrice: 'TBA',
+        openSeaUrl: 'https://opensea.io/collection/portion-punks',
+      },
+      roadmap: [],
+      faqs: [],
+      socials: [],
+      settings: {},
+    });
   }
 }
